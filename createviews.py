@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import httplib, json
 import sys
 import socket
@@ -64,13 +66,13 @@ def view_update(conn, view_url, view):
 
 def view_process(conn, db, view):
 	view_url = "/" + db + "/_design/" + os.path.basename(view)
-	print view_url
+	print(view_url)
 	if not view_exists(conn, view_url):
 		if not view_create(conn, "/" + db, open(view, "r")):
-			print "... creation FAILED!"
+			print("... creation FAILED!")
 	else:
 		if not view_update(conn, view_url, open(view, "r")):
-			print "... update FAILED!"
+			print("... update FAILED!")
 
 
 host = "localhost"
@@ -84,17 +86,17 @@ viewpath = "couchviews"
 conn = CouchConnection(host, port, username, password)
 try:
 	if not database_exists(conn, db):
-		print "Creating database '" + db + "'..."
+		print("Creating database '" + db + "'...")
 		if not database_create(conn, db):
-			print "... FAILED"
+			print("... FAILED") 
 	else:
-		print "Database '" + db + "' already exists."
+		print("Database '" + db + "' already exists.")
 
 	for view in os.listdir(viewpath):
-		print "Creating view '" + view + "'..."
+		print("Creating view '" + view + "'...")
 		view_process(conn, db, viewpath + "/" + view)
 except socket.error as e:
-	print "Could not connect to CouchDB <" + str(e) + ">! Exiting..."
+	print("Could not connect to CouchDB <" + str(e) + ">! Exiting...")
 	sys.exit(1)
 
 
